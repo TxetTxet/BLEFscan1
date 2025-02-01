@@ -1,0 +1,31 @@
+name: Build Bluetooth Scanner
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Setup environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget qemu-system-x86 zip docker
+        git clone --recursive https://github.com/flipperdevices/flipperzero-firmware.git
+        
+    - name: Copy application
+      run: |
+        mkdir -p flipperzero-firmware/applications_user/bluetooth_scanner
+        cp -r applications_user/bluetooth_scanner/* flipperzero-firmware/applications_user/bluetooth_scanner/
+        
+    - name: Build with Docker
+      working-directory: ./flipperzero-firmware
+      run: |
+        ./fbt COMPACT=1 DEBUG=0 launch_app APPSRC=applications_user/bluetooth_scanner
+        mv dist/f7-C/apps/External/bluetooth_scanner.fap .
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: bluetooth_scanner.fap
+        path: flipperzero-firmware/bluetooth_scanner.fap
