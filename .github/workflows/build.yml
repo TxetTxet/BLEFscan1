@@ -5,12 +5,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4  # Actualizado a v4
-      
+      uses: actions/checkout@v4
+    
     - name: Setup environment
       run: |
         sudo apt-get update
-        sudo apt-get install -y wget qemu-system-x86 zip docker
+        sudo apt-get install -y wget qemu-system-x86 zip
+        # Instalar Docker (moby-engine)
+        sudo apt-get install -y moby-engine moby-cli containerd
+        sudo usermod -aG docker $USER
+        newgrp docker
+        # Configurar Flipper SDK
         git clone --recursive https://github.com/flipperdevices/flipperzero-firmware.git
         
     - name: Copy application
@@ -23,9 +28,9 @@ jobs:
       run: |
         ./fbt COMPACT=1 DEBUG=0 launch_app APPSRC=applications_user/bluetooth_scanner
         mv dist/f7-C/apps/External/bluetooth_scanner.fap .
-    
+        
     - name: Upload artifact
-      uses: actions/upload-artifact@v4  # Versión actualizada aquí
+      uses: actions/upload-artifact@v4
       with:
         name: bluetooth_scanner.fap
         path: flipperzero-firmware/bluetooth_scanner.fap
