@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4  # Actualizado a v4
       
     - name: Setup environment
       run: |
@@ -23,9 +23,9 @@ jobs:
       run: |
         ./fbt COMPACT=1 DEBUG=0 launch_app APPSRC=applications_user/bluetooth_scanner
         mv dist/f7-C/apps/External/bluetooth_scanner.fap .
-        
+    
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4  # Versión actualizada aquí
       with:
         name: bluetooth_scanner.fap
         path: flipperzero-firmware/bluetooth_scanner.fap
