@@ -1,0 +1,9 @@
+App(
+    appid="bluetooth_scanner",
+    name="BT Scanner",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="bluetooth_scanner_app",
+    stack_size=1.5 * 1024,
+    fap_icon="icons/bluetooth_scanner_10px",
+    requires=["gui", "bluetooth", "storage"],
+)
